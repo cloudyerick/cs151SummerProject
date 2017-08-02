@@ -6,51 +6,61 @@ import java.util.GregorianCalendar;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class View extends JFrame
 {
 	public View()
 	{
 		JFrame myFrame = new JFrame();
-		myFrame.setSize(400, 350);
+		GregorianCalendar cal = new GregorianCalendar();
+		MonthPanel monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
 		
 		myFrame.setLocation(20, 20);
 		
 		JButton today = new JButton("Today");
 		JButton left = new JButton("<");
 		JButton right = new JButton(">");
+		JButton createButton = new JButton("Create");
 		
 		JButton dayButton = new JButton("Day");
 		JButton weekButton = new JButton("Week");
 		JButton monthButton = new JButton("Month");
 		JButton agendaButton = new JButton("Agenda");
+		JButton fromFileButton = new JButton("From File");
 		
-		JPanel topLeft = new JPanel();
-		JPanel topRight = new JPanel();
+		JPanel leftPanel = new JPanel();
+		JPanel rightPanel = new JPanel();
 		
-		topLeft.add(today);
-		topLeft.add(left);
-		topLeft.add(right);
+		JPanel leftButtonPanel = new JPanel();  //Top panel for (LEFT panel).
+		leftButtonPanel.add(today);
+		leftButtonPanel.add(left);
+		leftButtonPanel.add(right);
 		
-		topRight.add(dayButton);
-		topRight.add(weekButton);
-		topRight.add(monthButton);
-		topRight.add(agendaButton);
+		leftPanel.setLayout(new BorderLayout());
+		leftPanel.add(leftButtonPanel, BorderLayout.NORTH);
+		leftPanel.add(createButton, BorderLayout.CENTER);
+		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		
-		myFrame.add(topLeft);
-		myFrame.add(topRight);
+		JPanel rightButtonPanel = new JPanel(); //Top panel for (RIGHT panel).
+		rightButtonPanel.add(dayButton);
+		rightButtonPanel.add(weekButton);
+		rightButtonPanel.add(monthButton);
+		rightButtonPanel.add(agendaButton);
 		
-		//Calendar frame
-		JFrame calFrame = new JFrame();
-		calFrame.setLocation(500, 20);
-		GregorianCalendar cal = new GregorianCalendar();
-		MonthPanel monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
-		calFrame.add(monthPanel);
-		calFrame.pack();
-		calFrame.setVisible(true);
-		calFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JTextArea eventList = new JTextArea();
+		eventList.setEditable(false);
+		eventList.setRows(24);
 		
+		rightPanel.setLayout(new BorderLayout());
+		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
+		rightPanel.add(eventList, BorderLayout.CENTER);
+		
+		myFrame.add(leftPanel);
+		myFrame.add(rightPanel);
+		myFrame.add(fromFileButton);
 		myFrame.setLayout(new FlowLayout());  //Experimental Layout (for now)
+		myFrame.pack();
 		myFrame.setVisible(true);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
