@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,9 +12,9 @@ public class View extends JFrame
 	public View()
 	{
 		JFrame myFrame = new JFrame();
-		myFrame.setSize(800, 650);
+		myFrame.setSize(400, 350);
 		
-		myFrame.setLocation(60, 60);
+		myFrame.setLocation(20, 20);
 		
 		JButton today = new JButton("Today");
 		JButton left = new JButton("<");
@@ -38,6 +39,16 @@ public class View extends JFrame
 		
 		myFrame.add(topLeft);
 		myFrame.add(topRight);
+		
+		//Calendar frame
+		JFrame calFrame = new JFrame();
+		calFrame.setLocation(500, 20);
+		GregorianCalendar cal = new GregorianCalendar();
+		MonthPanel monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
+		calFrame.add(monthPanel);
+		calFrame.pack();
+		calFrame.setVisible(true);
+		calFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		myFrame.setLayout(new FlowLayout());  //Experimental Layout (for now)
 		myFrame.setVisible(true);
