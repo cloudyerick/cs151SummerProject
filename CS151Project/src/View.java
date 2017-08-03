@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
@@ -10,6 +11,17 @@ import javax.swing.JTextArea;
 
 public class View extends JFrame
 {
+	JButton today = new JButton("Today");
+	JButton left = new JButton("<");
+	JButton right = new JButton(">");
+	JButton createButton = new JButton("Create");
+	
+	JButton dayButton = new JButton("Day");
+	JButton weekButton = new JButton("Week");
+	JButton monthButton = new JButton("Month");
+	JButton agendaButton = new JButton("Agenda");
+	JButton fromFileButton = new JButton("From File");
+	
 	public View()
 	{
 		JFrame myFrame = new JFrame();
@@ -18,16 +30,7 @@ public class View extends JFrame
 		
 		myFrame.setLocation(20, 20);
 		
-		JButton today = new JButton("Today");
-		JButton left = new JButton("<");
-		JButton right = new JButton(">");
-		JButton createButton = new JButton("Create");
 		
-		JButton dayButton = new JButton("Day");
-		JButton weekButton = new JButton("Week");
-		JButton monthButton = new JButton("Month");
-		JButton agendaButton = new JButton("Agenda");
-		JButton fromFileButton = new JButton("From File");
 		
 		JPanel leftPanel = new JPanel();
 		JPanel rightPanel = new JPanel();
@@ -64,5 +67,9 @@ public class View extends JFrame
 		myFrame.setVisible(true);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+	}
+	
+	public void addEventActionListener(ActionListener l){
+		createButton.addActionListener(l);
 	}
 }

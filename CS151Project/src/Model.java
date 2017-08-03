@@ -1,9 +1,14 @@
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.event.ChangeListener;
+
+import java.util.ArrayList;
+
 public class Model {
 
 	private GregorianCalendar cal = new GregorianCalendar();
+	private ArrayList<ChangeListener> listeners = new ArrayList<>();
 	
 	public Model() {
 		
