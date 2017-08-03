@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
@@ -10,15 +12,25 @@ import javax.swing.JTextArea;
 
 public class View extends JFrame
 {
-	public View()
+	public View(Model model)
 	{
-		JFrame myFrame = new JFrame();
+		JFrame myFrame = new JFrame("Calendar");
 		GregorianCalendar cal = new GregorianCalendar();
 		MonthPanel monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
 		
 		myFrame.setLocation(20, 20);
 		
+		//BUTTONS
+		
+		//TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		JButton today = new JButton("Today");
+		today.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.goToToday();
+			}
+		});
+		
 		JButton left = new JButton("<");
 		JButton right = new JButton(">");
 		JButton createButton = new JButton("Create");
@@ -63,6 +75,7 @@ public class View extends JFrame
 		myFrame.pack();
 		myFrame.setVisible(true);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 	}
+	
+
 }
