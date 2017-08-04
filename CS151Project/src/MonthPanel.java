@@ -17,7 +17,13 @@ public class MonthPanel extends JPanel {
 
     protected int month;
     protected int year;
-
+    protected int day;
+    public int tMonth;
+    public int tDay;
+    public int tYear;
+    public Calendar today;
+    
+    
     public String[] monthNames = 
     	{ "January", "February",
             "March", "April", "May", "June", "July", "August", "September",
@@ -28,13 +34,23 @@ public class MonthPanel extends JPanel {
     	{ "S", "M", "T", "W",
             "T", "F", "S"};
 
-    public MonthPanel(int month, int year) {
+    public MonthPanel(int month, int year, int day) {
         this.month = month;
         this.year = year;
-
+        this.day = day;
         this.add(createGUI());
+        
     }
 
+    public void nextDay()
+    {
+    	today.add(Calendar.DAY_OF_MONTH, 1);
+    }
+    public void prevDay()
+    {
+    	today.add(Calendar.DAY_OF_MONTH, -1);
+    }
+    
     protected JPanel createGUI() {
         JPanel monthPanel = new JPanel(true);
         monthPanel.setBorder(BorderFactory
@@ -52,11 +68,11 @@ public class MonthPanel extends JPanel {
         JPanel dayPanel = new JPanel(true);
         dayPanel.setLayout(new GridLayout(0, dayNames.length));
 
-        Calendar today = Calendar.getInstance();
-        int tMonth = today.get(Calendar.MONTH);
-        int tYear = today.get(Calendar.YEAR);
-        int tDay = today.get(Calendar.DAY_OF_MONTH);
-
+        today = Calendar.getInstance();
+        tMonth = today.get(Calendar.MONTH);
+        tYear = today.get(Calendar.YEAR);
+        tDay = today.get(Calendar.DAY_OF_MONTH);
+        
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.YEAR, year);
@@ -96,7 +112,7 @@ public class MonthPanel extends JPanel {
                 dayButton.setText(Integer.toString(lDay));
                 dayLabel.setText(Integer.toString(lDay));
                 
-                if ((tMonth == month) && (tYear == year) && (tDay == lDay)) {
+                if ((tMonth == month) && (tYear == year) && (day == lDay)) {
                     dPanel.setBackground(Color.ORANGE);
                 } else {
                     dPanel.setBackground(Color.WHITE);

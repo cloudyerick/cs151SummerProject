@@ -39,6 +39,12 @@ public class View  implements ChangeListener, Runnable
 	private JButton fromFileButton = new JButton("From File");
 	private JFrame myFrame;
 	
+	private JButton leftDay = new JButton("<");
+	private JButton rightDay = new JButton(">");
+	
+
+	
+	
 	/******************************
 	 * PANEL INSTANCE VARIABLES ***
 	 *****************************/
@@ -61,7 +67,7 @@ public class View  implements ChangeListener, Runnable
 	{
 		this.model = model;
 		myFrame = new JFrame("Calendar");
-		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
+		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR), cal.get(cal.DAY_OF_MONTH));
 		myFrame.setLocation(20, 20);
 		
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
@@ -74,11 +80,8 @@ public class View  implements ChangeListener, Runnable
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
-<<<<<<< HEAD
-=======
 				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
 				run();
->>>>>>> 968706d903088cf389612bcfeb5fd7df9eaac31b
 			}
 		});
 		
@@ -102,7 +105,26 @@ public class View  implements ChangeListener, Runnable
 			}
 		});
 		
+		leftDay.setPreferredSize(new Dimension(30, 30));
+		rightDay.setPreferredSize(new Dimension(30, 30));
 		
+		leftDay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.previousDay();
+				monthPanel.prevDay();
+				run();
+			}
+		});
+		
+		rightDay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.nextDay();
+				monthPanel.nextDay();
+				run();
+			}
+		});
 		
 		
 		//Date Label
@@ -110,17 +132,19 @@ public class View  implements ChangeListener, Runnable
 		dateLabel.setBackground(Color.WHITE);
 		
 		JPanel leftButtonPanel = new JPanel();  //Top panel for (LEFT panel).
+		leftButtonPanel.add(createButton);
 		leftButtonPanel.add(today);
 		leftButtonPanel.add(left);
 		leftButtonPanel.add(right);
 		
 		leftPanel.setLayout(new BorderLayout());
 		leftPanel.add(leftButtonPanel, BorderLayout.NORTH);
-		leftPanel.add(createButton, BorderLayout.CENTER);
 		leftPanel.add(dateLabel);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		JPanel rightButtonPanel = new JPanel(); //Top panel for (RIGHT panel).
+		rightButtonPanel.add(leftDay);
 		rightButtonPanel.add(dayButton);
+		rightButtonPanel.add(rightDay);
 		rightButtonPanel.add(weekButton);
 		rightButtonPanel.add(monthButton);
 		rightButtonPanel.add(agendaButton);
@@ -132,6 +156,14 @@ public class View  implements ChangeListener, Runnable
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
 		rightPanel.add(eventList, BorderLayout.CENTER);
+		
+		
+		
+
+		
+		
+		
+		
 		
 		myFrame.add(leftPanel);
 		myFrame.add(rightPanel);
@@ -160,7 +192,7 @@ public class View  implements ChangeListener, Runnable
 	public void run() {
 		leftPanel.remove(monthPanel);
 		monthPanel = null;
-		monthPanel = new MonthPanel(model.getMonth(), model.getYear());
+		monthPanel = new MonthPanel(model.getMonth(), model.getYear(), model.getDay());
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		leftPanel.repaint();
 		myFrame.pack();
