@@ -74,11 +74,8 @@ public class View  implements ChangeListener, Runnable
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
-<<<<<<< HEAD
-=======
 				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
 				run();
->>>>>>> 968706d903088cf389612bcfeb5fd7df9eaac31b
 			}
 		});
 		
