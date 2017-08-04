@@ -8,7 +8,10 @@ import java.util.ArrayList;
 public class Model {
 
 	private GregorianCalendar cal = new GregorianCalendar();
+<<<<<<< HEAD
 	private ArrayList<ChangeListener> listeners = new ArrayList<>();
+=======
+>>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
 	private SelectedView currentView;
 	
 	public Model() {

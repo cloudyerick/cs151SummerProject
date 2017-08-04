@@ -3,7 +3,12 @@
 /Model.class
 /MonthPanel.class
 /View.class
+<<<<<<< HEAD
 /Controller.class
 /Controller$1.class
 /Controller$2.class
 /Model$SelectedView.class
+=======
+/Model$SelectedView.class
+/View$1.class
+>>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
