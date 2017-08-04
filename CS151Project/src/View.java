@@ -57,12 +57,15 @@ public class View  implements ChangeListener
 		myFrame.setLocation(20, 20);
 		
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
+		//ALL BUTTON FUNCTIONALITY GOES HERE:
+		//ALL BUTTON FUNCTIONALITY GOES HERE:
+		
+		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		today.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
-				
 			}
 		});
 		
