@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -7,11 +8,19 @@ import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class View extends JFrame
 {
+    public String[] monthNames = 
+    	{ "January", "February",
+            "March", "April", "May", "June", "July", "August", "September",
+            "October", "November", "December"       
+        };
+	
 	public View(Model model)
 	{
 		JFrame myFrame = new JFrame("Calendar");
@@ -30,6 +39,11 @@ public class View extends JFrame
 				model.goToToday();
 			}
 		});
+		
+		//Date Label
+		JLabel dateLabel = new JLabel(monthNames[cal.get(cal.MONTH)] + " " + cal.get(cal.DAY_OF_MONTH) + " " + cal.get(cal.YEAR), SwingConstants.CENTER); 
+		dateLabel.setOpaque(true);
+		dateLabel.setBackground(Color.WHITE);
 		
 		JButton left = new JButton("<");
 		JButton right = new JButton(">");
@@ -52,6 +66,7 @@ public class View extends JFrame
 		leftPanel.setLayout(new BorderLayout());
 		leftPanel.add(leftButtonPanel, BorderLayout.NORTH);
 		leftPanel.add(createButton, BorderLayout.CENTER);
+		leftPanel.add(dateLabel);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		
 		JPanel rightButtonPanel = new JPanel(); //Top panel for (RIGHT panel).
