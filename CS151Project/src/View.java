@@ -15,7 +15,6 @@ import javax.swing.SwingConstants;
 
 public class View extends JFrame
 {
-<<<<<<< HEAD
 	JButton today = new JButton("Today");
 	JButton left = new JButton("<");
 	JButton right = new JButton(">");
@@ -27,11 +26,8 @@ public class View extends JFrame
 	JButton agendaButton = new JButton("Agenda");
 	JButton fromFileButton = new JButton("From File");
 	
-	public String[] monthNames = 
-=======
     public String[] monthNames = 
->>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
-    	{ "January", "February",
+		{ "January", "February",
             "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December"       
         };
@@ -44,29 +40,7 @@ public class View extends JFrame
 		
 		myFrame.setLocation(20, 20);
 		
-<<<<<<< HEAD
-=======
-		//BUTTONS
-		
-		//TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
-		JButton today = new JButton("Today");
-		today.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.goToToday();
-			}
-		});
-		
-		//Date Label
-		JLabel dateLabel = new JLabel(monthNames[cal.get(cal.MONTH)] + " " + cal.get(cal.DAY_OF_MONTH) + " " + cal.get(cal.YEAR), SwingConstants.CENTER); 
-		dateLabel.setOpaque(true);
-		dateLabel.setBackground(Color.WHITE);
-		
-		JButton left = new JButton("<");
-		JButton right = new JButton(">");
-		JButton createButton = new JButton("Create");
->>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
-		
+
 		//Date Label
 		JLabel dateLabel = new JLabel(monthNames[cal.get(cal.MONTH)] + " " + cal.get(cal.DAY_OF_MONTH) + " " + cal.get(cal.YEAR), SwingConstants.CENTER); 
 		dateLabel.setOpaque(true);
@@ -109,7 +83,6 @@ public class View extends JFrame
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-<<<<<<< HEAD
 	//add action listener methods
 	public void addEventActionListener(ActionListener l){
 		createButton.addActionListener(l);
@@ -119,7 +92,4 @@ public class View extends JFrame
 		today.addActionListener(l);
 	}
 	
-=======
-
->>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
 }
