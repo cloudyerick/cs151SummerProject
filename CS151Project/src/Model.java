@@ -14,7 +14,8 @@ public class Model {
 	private GregorianCalendar cal = new GregorianCalendar();
 	private ArrayList<ChangeListener> listeners = new ArrayList<>();
 	private SelectedView currentView;
-
+	private int presentDate;
+	
 	public Model() {
 		currentView = SelectedView.DAY;
 	}
@@ -52,12 +53,13 @@ public class Model {
 		cal.add(Calendar.DAY_OF_MONTH, 1);
 	}
 
-	public void nextWeek() {
-		cal.add(Calendar.WEEK_OF_YEAR, 1);
-	}
 	//GOES TO NEXT DAY - JONATHAN
 	public void nextMonth() {
 		cal.add(Calendar.MONTH, 1);
+	}
+	
+	public void nextWeek() {
+		cal.add(Calendar.WEEK_OF_YEAR, 1);
 	}
 
 	//GOES TO PREVIOUS DAY - JONATHAN 
