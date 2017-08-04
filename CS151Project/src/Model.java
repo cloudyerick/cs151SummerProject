@@ -3,15 +3,13 @@ import java.util.GregorianCalendar;
 
 import javax.swing.event.ChangeListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Model {
 
 	private GregorianCalendar cal = new GregorianCalendar();
-<<<<<<< HEAD
 	private ArrayList<ChangeListener> listeners = new ArrayList<>();
-=======
->>>>>>> acc29bc418f4847541298b3a8a1e27fc1535970f
 	private SelectedView currentView;
 	
 	public Model() {
@@ -76,5 +74,29 @@ public class Model {
 	 */
 	private enum SelectedView {
 		DAY, WEEK, MONTH, AGENDA;
+	}
+	
+	private static class Event implements Serializable{
+		 
+		 private static final long serialVersionUID    = -6030371583841330976L;
+		 private String title;
+		 private String date;
+		 private String beginTime;
+		 private String endTime;
+		 
+		 private Event(String title1, String date1, String beginTime1, String endTime1){
+			 
+			 title = title1;
+			 date = date1;
+			 beginTime = beginTime1;
+			 endTime = endTime1;
+		 }
+		 
+		 public String toString(){
+			 
+			 return beginTime + "-" + endTime + ":" + title;
+					 
+		 } 
+		 
 	}
 }
