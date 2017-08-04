@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
@@ -15,7 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class View  implements ChangeListener
+public class View  implements ChangeListener, Runnable
 {
 	private GregorianCalendar cal = new GregorianCalendar();
     private String[] monthNames = 
@@ -36,6 +37,7 @@ public class View  implements ChangeListener
 	private JButton monthButton = new JButton("Month");
 	private JButton agendaButton = new JButton("Agenda");
 	private JButton fromFileButton = new JButton("From File");
+	private JFrame myFrame;
 	
 	/******************************
 	 * PANEL INSTANCE VARIABLES ***
@@ -43,6 +45,11 @@ public class View  implements ChangeListener
 	private MonthPanel monthPanel;
 	private JPanel leftPanel = new JPanel();
 	private JPanel rightPanel = new JPanel();
+	
+	/******
+	 * OTHER
+	 */
+	private Model model;
 	
 	/***************************
 	 * LABEL INSTANCE VARIABLES
@@ -52,7 +59,8 @@ public class View  implements ChangeListener
 	
 	public View(Model model)
 	{
-		JFrame myFrame = new JFrame("Calendar");
+		this.model = model;
+		myFrame = new JFrame("Calendar");
 		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR));
 		myFrame.setLocation(20, 20);
 		
@@ -62,14 +70,18 @@ public class View  implements ChangeListener
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
-				
+				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
+				run();
 			}
 		});
 		
 		left.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.previousDay();
+			public void actionPerformed(ActionEvent e) 
+			{
+				model.previousMonth();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getYear());
+				run();
 			}
 		});
 		
@@ -77,7 +89,9 @@ public class View  implements ChangeListener
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.nextDay();
+				model.nextMonth();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getYear());
+				run();
 			}
 		});
 		
@@ -98,7 +112,6 @@ public class View  implements ChangeListener
 		leftPanel.add(createButton, BorderLayout.CENTER);
 		leftPanel.add(dateLabel);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
-		
 		JPanel rightButtonPanel = new JPanel(); //Top panel for (RIGHT panel).
 		rightButtonPanel.add(dayButton);
 		rightButtonPanel.add(weekButton);
@@ -133,8 +146,17 @@ public class View  implements ChangeListener
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		monthPanel.removeAll();
-		monthPanel.createGUI();
+		
+	}
+
+	@Override
+	public void run() {
+		leftPanel.remove(monthPanel);
+		monthPanel = null;
+		monthPanel = new MonthPanel(model.getMonth(), model.getYear());
+		leftPanel.add(monthPanel, BorderLayout.SOUTH);
+		leftPanel.repaint();
+		myFrame.pack();
 	}
 }
 
