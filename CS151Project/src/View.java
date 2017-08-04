@@ -1,13 +1,17 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class View extends JFrame
 {
@@ -22,7 +26,13 @@ public class View extends JFrame
 	JButton agendaButton = new JButton("Agenda");
 	JButton fromFileButton = new JButton("From File");
 	
-	public View()
+	public String[] monthNames = 
+    	{ "January", "February",
+            "March", "April", "May", "June", "July", "August", "September",
+            "October", "November", "December"       
+        };
+	
+	public View(Model model)
 	{
 		JFrame myFrame = new JFrame();
 		GregorianCalendar cal = new GregorianCalendar();
@@ -31,6 +41,10 @@ public class View extends JFrame
 		myFrame.setLocation(20, 20);
 		
 		
+		//Date Label
+		JLabel dateLabel = new JLabel(monthNames[cal.get(cal.MONTH)] + " " + cal.get(cal.DAY_OF_MONTH) + " " + cal.get(cal.YEAR), SwingConstants.CENTER); 
+		dateLabel.setOpaque(true);
+		dateLabel.setBackground(Color.WHITE);
 		
 		JPanel leftPanel = new JPanel();
 		JPanel rightPanel = new JPanel();
@@ -43,6 +57,7 @@ public class View extends JFrame
 		leftPanel.setLayout(new BorderLayout());
 		leftPanel.add(leftButtonPanel, BorderLayout.NORTH);
 		leftPanel.add(createButton, BorderLayout.CENTER);
+		leftPanel.add(dateLabel);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		
 		JPanel rightButtonPanel = new JPanel(); //Top panel for (RIGHT panel).
@@ -69,7 +84,13 @@ public class View extends JFrame
 		
 	}
 	
+	//add action listener methods
 	public void addEventActionListener(ActionListener l){
 		createButton.addActionListener(l);
 	}
+	
+	public void addTodayActionListener(ActionListener l){
+		today.addActionListener(l);
+	}
+	
 }

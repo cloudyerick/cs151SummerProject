@@ -10,12 +10,20 @@ public class Controller {
 		this.view = theView;
 		this.model = theModel;
 		
-		//
+		//define actions performed
 		view.addEventActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				createEvent();
+			}
+		});
+		
+		view.addEventActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.goToToday();
 			}
 		});
 		
@@ -25,4 +33,5 @@ public class Controller {
 	public void createEvent(){
 		//create event stuff
 	}
+	
 }
