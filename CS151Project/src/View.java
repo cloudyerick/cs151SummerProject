@@ -176,15 +176,12 @@ public class View  implements ChangeListener, Runnable
 		createButton.addActionListener(l);
 	}
 	
-<<<<<<< HEAD
 	//create event method
 	public void createEvent(){
-		
+	}
 
-=======
 	public void addTodayActionListener(ActionListener l){
 		today.addActionListener(l);
->>>>>>> ee83f7888a5866a78ec925f4c89c99789e1f506f
 	}
 
 	@Override
