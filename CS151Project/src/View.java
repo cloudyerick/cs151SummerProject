@@ -186,7 +186,8 @@ public class View  implements ChangeListener, Runnable
 	
 	//create event method
 	public void createEvent(){
-		//create event stuff
+		
+
 	}
 
 	@Override
