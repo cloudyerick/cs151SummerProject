@@ -30,6 +30,11 @@ public class Model {
 			l.stateChanged(new ChangeEvent(this));
 		}
 	}
+	
+	//returns number of days in month
+	public int getDaysInMonth(){
+		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
 
 	//SETS CALENDAR TO TODAY'S DATE - JONATHAN 
 	public void goToToday() {

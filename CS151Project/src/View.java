@@ -74,6 +74,16 @@ public class View  implements ChangeListener, Runnable
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		
+		//CREATE BUTTON
+		createButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				createEvent();
+			}
+		});
+		
+		
 		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		today.addActionListener(new ActionListener() {
@@ -173,14 +183,10 @@ public class View  implements ChangeListener, Runnable
 		myFrame.setVisible(true);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
-	//add action listener methods
-	public void addEventActionListener(ActionListener l){
-		createButton.addActionListener(l);
-	}
 	
-	public void addTodayActionListener(ActionListener l){
-		today.addActionListener(l);
+	//create event method
+	public void createEvent(){
+		//create event stuff
 	}
 
 	@Override

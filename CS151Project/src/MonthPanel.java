@@ -95,7 +95,8 @@ public class MonthPanel extends JPanel {
 
         int count = 0;
         int limit = dayNames.length * 6;
-
+        
+        //adds buttons for each day of calendar
         while (iterator.getTimeInMillis() < maximum.getTimeInMillis()) {
             int lMonth = iterator.get(Calendar.MONTH);
             int lYear = iterator.get(Calendar.YEAR);
@@ -104,11 +105,13 @@ public class MonthPanel extends JPanel {
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             JLabel dayLabel = new JLabel();
             JButton dayButton = new JButton();
-            dayButton.setPreferredSize(new Dimension(40, 40));
+            //dayButton.setPreferredSize(new Dimension(40, 40));
 
             if ((lMonth == month) && (lYear == year)) {
+            	//
                 int lDay = iterator.get(Calendar.DAY_OF_MONTH);
                 
+                //creates numbered day label
                 dayButton.setText(Integer.toString(lDay));
                 dayLabel.setText(Integer.toString(lDay));
                 
@@ -138,7 +141,8 @@ public class MonthPanel extends JPanel {
             iterator.add(Calendar.DAY_OF_YEAR, +1);
             count++;
         }
-
+        
+        //fills in blank dates in grid
         for (int i = count; i < limit; i++) {
             JPanel dPanel = new JPanel(true);
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
