@@ -168,11 +168,76 @@ public class View  implements ChangeListener, Runnable
 				//Text Components 
 				JTextField eventName = new JTextField("Untitled Event", 30);
 				JTextField startTime = new JTextField("Start Time");
+				JLabel toLabel = new JLabel("to");
 				JTextField endTime = new JTextField("End Time");
 				JLabel instruction = new JLabel("Enter time in hour format (0-23): ");
-				JCheckBox repeatBox = new JCheckBox("Repeat", false);
+				//JCheckBox repeatBox = new JCheckBox("Repeat", false); 
 				JButton saveButton = new JButton("Save");
+				saveButton.addActionListener(new ActionListener() {
+					@Override
+
+					public void actionPerformed(ActionEvent e) {
+						try {
+							if (Integer.valueOf(startTime.getText()) <= 23 && Integer.valueOf(startTime.getText()) >= 0 && 
+									Integer.valueOf(endTime.getText()) <= 23 && Integer.valueOf(endTime.getText()) >= 0 && eventName.getText().length() > 0) {
+								//SAVE FUNCTIONALITY HERE
+								createDialog.dispose();
+							}
+							else {
+								//ERROR DIALOG FROM PRE-CONDITION 
+								JDialog errorDialog = new JDialog();
+								errorDialog.setTitle("Error");
+								errorDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+								JPanel errorPanel = new JPanel();
+								JLabel errorMessage = new JLabel("Invalid event name or time. Try again.");
+								JButton okButton = new JButton("Ok");
+								okButton.addActionListener(new ActionListener() {
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										errorDialog.dispose();
+									}
+								});
+								errorPanel.setLayout(new BorderLayout());
+								errorPanel.add(errorMessage, BorderLayout.NORTH);
+								errorPanel.add(okButton, BorderLayout.CENTER);
+								errorDialog.add(errorPanel);
+								errorDialog.setLocationRelativeTo(createDialog);
+								errorDialog.pack();
+								errorDialog.setVisible(true);
+							}
+						}
+						catch (NumberFormatException n) {
+							//ERROR DIALOG FROM EXCEPTION
+							JDialog errorDialog = new JDialog();
+							errorDialog.setTitle("Error");
+							errorDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+							JPanel errorPanel = new JPanel();
+							JLabel errorMessage = new JLabel("Invalid event name or time. Try again.");
+							JButton okButton = new JButton("Ok");
+							okButton.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									errorDialog.dispose();
+								}
+							});
+							errorPanel.setLayout(new BorderLayout());
+							errorPanel.add(errorMessage, BorderLayout.NORTH);
+							errorPanel.add(okButton, BorderLayout.CENTER);
+							errorDialog.add(errorPanel);
+							errorDialog.setLocationRelativeTo(createDialog);
+							errorDialog.pack();
+							errorDialog.setVisible(true);
+						}
+						String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
+						+ String.valueOf(model.getYear());
+						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
+						System.out.println(eventCreated);
+					}
+					
+				});
 				
+				//DONT NEED A REPEAT FUNCTIONALITY, KEEP AS COMMENT FOR NOW
+				/*
 				repeatBox.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -232,6 +297,7 @@ public class View  implements ChangeListener, Runnable
 						}
 					}
 				});
+				*/
 				
 				saveButton.addActionListener(new ActionListener() {
 					@Override
@@ -246,11 +312,12 @@ public class View  implements ChangeListener, Runnable
 				createDialog.add(instruction, BorderLayout.CENTER);
 				JPanel timeStrip = new JPanel();
 				timeStrip.add(startTime);
+				timeStrip.add(toLabel);
 				timeStrip.add(endTime);
-				timeStrip.add(repeatBox);
+				//timeStrip.add(repeatBox);
 				timeStrip.add(saveButton);
 				
-				
+				createDialog.setLocationRelativeTo(myFrame);
 				createDialog.add(timeStrip, BorderLayout.SOUTH);
 				createDialog.pack();
 				createDialog.setVisible(true);
