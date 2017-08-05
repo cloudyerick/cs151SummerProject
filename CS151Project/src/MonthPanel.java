@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.time.YearMonth;
 import java.util.Calendar;
 
 import javax.swing.BorderFactory;
@@ -22,6 +23,7 @@ public class MonthPanel extends JPanel {
     public int tDay;
     public int tYear;
     public Calendar today;
+    public int lDay;
     
     
     public String[] monthNames = 
@@ -38,6 +40,7 @@ public class MonthPanel extends JPanel {
         this.month = month;
         this.year = year;
         this.day = day;
+        
         this.add(createGUI());
         
     }
@@ -49,6 +52,7 @@ public class MonthPanel extends JPanel {
     public void prevDay()
     {
     	today.add(Calendar.DAY_OF_MONTH, -1);
+
     }
     
     protected JPanel createGUI() {
@@ -67,11 +71,13 @@ public class MonthPanel extends JPanel {
     protected JPanel createDaysGUI() {
         JPanel dayPanel = new JPanel(true);
         dayPanel.setLayout(new GridLayout(0, dayNames.length));
-
+        
         today = Calendar.getInstance();
         tMonth = today.get(Calendar.MONTH);
         tYear = today.get(Calendar.YEAR);
         tDay = today.get(Calendar.DAY_OF_MONTH);
+        
+        
         
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, month);
@@ -96,7 +102,7 @@ public class MonthPanel extends JPanel {
         int count = 0;
         int limit = dayNames.length * 6;
         
-        //adds buttons for each day of calendar
+        
         while (iterator.getTimeInMillis() < maximum.getTimeInMillis()) {
             int lMonth = iterator.get(Calendar.MONTH);
             int lYear = iterator.get(Calendar.YEAR);
@@ -105,18 +111,18 @@ public class MonthPanel extends JPanel {
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             JLabel dayLabel = new JLabel();
             JButton dayButton = new JButton();
-            //dayButton.setPreferredSize(new Dimension(40, 40));
+            dayButton.setPreferredSize(new Dimension(40, 40));
 
+            
             if ((lMonth == month) && (lYear == year)) {
-            	//
-                int lDay = iterator.get(Calendar.DAY_OF_MONTH);
+                lDay = iterator.get(Calendar.DAY_OF_MONTH);
                 
-                //creates numbered day label
                 dayButton.setText(Integer.toString(lDay));
                 dayLabel.setText(Integer.toString(lDay));
                 
-                if ((tMonth == month) && (tYear == year) && (day == lDay)) {
+                if ((lMonth == month) && (lYear == year) && (day == lDay)) {
                     dPanel.setBackground(Color.ORANGE);
+                    
                 } else {
                     dPanel.setBackground(Color.WHITE);
                 }
@@ -141,8 +147,7 @@ public class MonthPanel extends JPanel {
             iterator.add(Calendar.DAY_OF_YEAR, +1);
             count++;
         }
-        
-        //fills in blank dates in grid
+
         for (int i = count; i < limit; i++) {
             JPanel dPanel = new JPanel(true);
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -152,7 +157,10 @@ public class MonthPanel extends JPanel {
             dPanel.add(dayLabel);
             dayPanel.add(dPanel);
         }
-
+        
+        
+        
+        
         return dayPanel;
     }
     

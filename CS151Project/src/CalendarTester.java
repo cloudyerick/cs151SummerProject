@@ -7,7 +7,6 @@ public class CalendarTester
 		Model model = new Model();
 		View view = new View(model);
 
-		//Testing Again
 	}
 	
 }

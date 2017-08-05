@@ -74,16 +74,6 @@ public class View  implements ChangeListener, Runnable
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		
-		//CREATE BUTTON
-		createButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				createEvent();
-			}
-		});
-		
-		
 		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		today.addActionListener(new ActionListener() {
@@ -100,7 +90,8 @@ public class View  implements ChangeListener, Runnable
 			public void actionPerformed(ActionEvent e) 
 			{
 				model.previousMonth();
-				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getYear());
+				model.setDay();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " " + model.getYear());
 				run();
 			}
 		});
@@ -110,7 +101,8 @@ public class View  implements ChangeListener, Runnable
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.nextMonth();
-				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getYear());
+				model.setDay();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				run();
 			}
 		});
@@ -123,6 +115,7 @@ public class View  implements ChangeListener, Runnable
 			public void actionPerformed(ActionEvent e) {
 				model.previousDay();
 				monthPanel.prevDay();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				run();
 			}
 		});
@@ -132,6 +125,7 @@ public class View  implements ChangeListener, Runnable
 			public void actionPerformed(ActionEvent e) {
 				model.nextDay();
 				monthPanel.nextDay();
+				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				run();
 			}
 		});
@@ -168,13 +162,6 @@ public class View  implements ChangeListener, Runnable
 		rightPanel.add(eventList, BorderLayout.CENTER);
 		
 		
-		
-
-		
-		
-		
-		
-		
 		myFrame.add(leftPanel);
 		myFrame.add(rightPanel);
 		myFrame.add(fromFileButton);
@@ -183,11 +170,21 @@ public class View  implements ChangeListener, Runnable
 		myFrame.setVisible(true);
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+	//add action listener methods
+	public void addEventActionListener(ActionListener l){
+		createButton.addActionListener(l);
+	}
 	
+<<<<<<< HEAD
 	//create event method
 	public void createEvent(){
 		
 
+=======
+	public void addTodayActionListener(ActionListener l){
+		today.addActionListener(l);
+>>>>>>> ee83f7888a5866a78ec925f4c89c99789e1f506f
 	}
 
 	@Override
@@ -203,6 +200,7 @@ public class View  implements ChangeListener, Runnable
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		leftPanel.repaint();
 		myFrame.pack();
+		
 	}
 }
 
