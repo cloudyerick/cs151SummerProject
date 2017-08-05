@@ -29,6 +29,7 @@ public class View  implements ChangeListener, Runnable
             "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December"       
         };
+    
 	
 	/*********************************
 	 * BUTTON INSTANCE VARIABLES******
@@ -43,6 +44,13 @@ public class View  implements ChangeListener, Runnable
 	private JButton agendaButton = new JButton("Agenda");
 	private JButton fromFileButton = new JButton("From File");
 	private JFrame myFrame;
+	
+	
+	
+	private JTextArea eventList = new JTextArea(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
+	
+	
+	
 	
 	private JButton leftDay = new JButton("<");
 	private JButton rightDay = new JButton(">");
@@ -79,6 +87,14 @@ public class View  implements ChangeListener, Runnable
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		
+		
+		//JTextArea eventList = new JTextArea();
+		eventList.setEditable(false);
+		eventList.setRows(24);
+		//eventList.setText(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
+		
+		
+		
 		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		today.addActionListener(new ActionListener() {
@@ -86,6 +102,7 @@ public class View  implements ChangeListener, Runnable
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -97,6 +114,7 @@ public class View  implements ChangeListener, Runnable
 				model.previousMonth();
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " " + model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -108,6 +126,7 @@ public class View  implements ChangeListener, Runnable
 				model.nextMonth();
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -121,6 +140,7 @@ public class View  implements ChangeListener, Runnable
 				model.previousDay();
 				monthPanel.prevDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -131,6 +151,7 @@ public class View  implements ChangeListener, Runnable
 				model.nextDay();
 				monthPanel.nextDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -258,9 +279,6 @@ public class View  implements ChangeListener, Runnable
 		rightButtonPanel.add(monthButton);
 		rightButtonPanel.add(agendaButton);
 		
-		JTextArea eventList = new JTextArea();
-		eventList.setEditable(false);
-		eventList.setRows(24);
 		
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
