@@ -7,11 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -24,6 +29,7 @@ public class View  implements ChangeListener, Runnable
             "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December"       
         };
+    
 	
 	/*********************************
 	 * BUTTON INSTANCE VARIABLES******
@@ -38,6 +44,13 @@ public class View  implements ChangeListener, Runnable
 	private JButton agendaButton = new JButton("Agenda");
 	private JButton fromFileButton = new JButton("From File");
 	private JFrame myFrame;
+	
+	
+	
+	private JTextArea eventList = new JTextArea(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
+	
+	
+	
 	
 	private JButton leftDay = new JButton("<");
 	private JButton rightDay = new JButton(">");
@@ -74,6 +87,14 @@ public class View  implements ChangeListener, Runnable
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		
+		
+		//JTextArea eventList = new JTextArea();
+		eventList.setEditable(false);
+		eventList.setRows(24);
+		//eventList.setText(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
+		
+		
+		
 		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
 		today.addActionListener(new ActionListener() {
@@ -81,6 +102,7 @@ public class View  implements ChangeListener, Runnable
 			public void actionPerformed(ActionEvent e) {
 				model.goToToday();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -92,6 +114,7 @@ public class View  implements ChangeListener, Runnable
 				model.previousMonth();
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " " + model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -103,6 +126,7 @@ public class View  implements ChangeListener, Runnable
 				model.nextMonth();
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -116,6 +140,7 @@ public class View  implements ChangeListener, Runnable
 				model.previousDay();
 				monthPanel.prevDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
@@ -126,10 +151,178 @@ public class View  implements ChangeListener, Runnable
 				model.nextDay();
 				monthPanel.nextDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
 				run();
 			}
 		});
 		
+		//CREATE BUTTON
+		createButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Dialog frame
+				JDialog createDialog = new JDialog();
+				createDialog.setTitle("Create An Event");
+				createDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+				
+				//Text Components 
+				JTextField eventName = new JTextField("Untitled Event", 30);
+				JTextField startTime = new JTextField("Start Time");
+				JLabel toLabel = new JLabel("to");
+				JTextField endTime = new JTextField("End Time");
+				JLabel instruction = new JLabel("Enter time in hour format (0-23): ");
+				//JCheckBox repeatBox = new JCheckBox("Repeat", false); 
+				JButton saveButton = new JButton("Save");
+				saveButton.addActionListener(new ActionListener() {
+					@Override
+
+					public void actionPerformed(ActionEvent e) {
+						try {
+							if (Integer.valueOf(startTime.getText()) <= 23 && Integer.valueOf(startTime.getText()) >= 0 && 
+									Integer.valueOf(endTime.getText()) <= 23 && Integer.valueOf(endTime.getText()) >= 0 && eventName.getText().length() > 0) {
+								//SAVE FUNCTIONALITY HERE
+								createDialog.dispose();
+							}
+							else {
+								//ERROR DIALOG FROM PRE-CONDITION 
+								JDialog errorDialog = new JDialog();
+								errorDialog.setTitle("Error");
+								errorDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+								JPanel errorPanel = new JPanel();
+								JLabel errorMessage = new JLabel("Invalid event name or time. Try again.");
+								JButton okButton = new JButton("Ok");
+								okButton.addActionListener(new ActionListener() {
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										errorDialog.dispose();
+									}
+								});
+								errorPanel.setLayout(new BorderLayout());
+								errorPanel.add(errorMessage, BorderLayout.NORTH);
+								errorPanel.add(okButton, BorderLayout.CENTER);
+								errorDialog.add(errorPanel);
+								errorDialog.setLocationRelativeTo(createDialog);
+								errorDialog.pack();
+								errorDialog.setVisible(true);
+							}
+						}
+						catch (NumberFormatException n) {
+							//ERROR DIALOG FROM EXCEPTION
+							JDialog errorDialog = new JDialog();
+							errorDialog.setTitle("Error");
+							errorDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+							JPanel errorPanel = new JPanel();
+							JLabel errorMessage = new JLabel("Invalid event name or time. Try again.");
+							JButton okButton = new JButton("Ok");
+							okButton.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									errorDialog.dispose();
+								}
+							});
+							errorPanel.setLayout(new BorderLayout());
+							errorPanel.add(errorMessage, BorderLayout.NORTH);
+							errorPanel.add(okButton, BorderLayout.CENTER);
+							errorDialog.add(errorPanel);
+							errorDialog.setLocationRelativeTo(createDialog);
+							errorDialog.pack();
+							errorDialog.setVisible(true);
+						}
+						String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
+						+ String.valueOf(model.getYear());
+						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
+						System.out.println(eventCreated);
+					}
+					
+				});
+				
+				//DONT NEED A REPEAT FUNCTIONALITY, KEEP AS COMMENT FOR NOW
+				/*
+				repeatBox.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (repeatBox.isSelected()) {
+						JDialog repeatDialog = new JDialog();
+						repeatDialog.setTitle("Repeat");
+						repeatDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+						JPanel repeatPanel = new JPanel();
+						
+						JPanel boxStrip = new JPanel();
+						JPanel monthStrip = new JPanel();
+						
+						JLabel topLabel = new JLabel("Repeat every ");
+						JLabel fromLabel = new JLabel("from");
+						JLabel toLabel = new JLabel("to");
+						
+						String[] months = {"January", "Februrary", "March", "April", "May", "June", "July", "August", "September",
+								"October", "November", "December"
+						};
+						
+						JComboBox startMonth = new JComboBox(months);	
+						JComboBox endMonth = new JComboBox(months);
+						
+						JCheckBox sunday = new JCheckBox("S", false);
+						JCheckBox monday = new JCheckBox("M", false);
+						JCheckBox tuesday = new JCheckBox("T", false);
+						JCheckBox wednesday = new JCheckBox("W", false);
+						JCheckBox thursday = new JCheckBox("T", false);
+						JCheckBox friday = new JCheckBox("F", false);
+						JCheckBox saturday = new JCheckBox("S", false);
+						
+						JButton okButton = new JButton("Ok");
+					
+						monthStrip.add(fromLabel);
+						monthStrip.add(startMonth);
+						monthStrip.add(toLabel);
+						monthStrip.add(endMonth);
+						
+						boxStrip.add(sunday);
+						boxStrip.add(monday);
+						boxStrip.add(tuesday);
+						boxStrip.add(wednesday);
+						boxStrip.add(thursday);
+						boxStrip.add(friday);
+						boxStrip.add(saturday);
+						
+						BoxLayout layout = new BoxLayout(repeatPanel, BoxLayout.Y_AXIS);
+						repeatPanel.setLayout(layout);
+						repeatPanel.add(topLabel);
+						repeatPanel.add(boxStrip);
+						repeatPanel.add(monthStrip);
+						repeatPanel.add(okButton);
+						
+						repeatDialog.add(repeatPanel);
+						repeatDialog.pack();
+						repeatDialog.setVisible(true);
+						}
+					}
+				});
+				*/
+				
+				saveButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						//INSERT SAVE FUNCTIONALITY
+						createDialog.dispose();
+					}
+				});
+				
+				createDialog.setLayout(new BorderLayout());
+				createDialog.add(eventName, BorderLayout.NORTH);
+				createDialog.add(instruction, BorderLayout.CENTER);
+				JPanel timeStrip = new JPanel();
+				timeStrip.add(startTime);
+				timeStrip.add(toLabel);
+				timeStrip.add(endTime);
+				//timeStrip.add(repeatBox);
+				timeStrip.add(saveButton);
+				
+				createDialog.setLocationRelativeTo(myFrame);
+				createDialog.add(timeStrip, BorderLayout.SOUTH);
+				createDialog.pack();
+				createDialog.setVisible(true);
+			}
+		});
 		
 		//Date Label
 		dateLabel.setOpaque(true);
@@ -153,9 +346,6 @@ public class View  implements ChangeListener, Runnable
 		rightButtonPanel.add(monthButton);
 		rightButtonPanel.add(agendaButton);
 		
-		JTextArea eventList = new JTextArea();
-		eventList.setEditable(false);
-		eventList.setRows(24);
 		
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
