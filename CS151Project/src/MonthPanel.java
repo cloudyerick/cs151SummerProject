@@ -111,7 +111,7 @@ public class MonthPanel extends JPanel {
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             JLabel dayLabel = new JLabel();
             JButton dayButton = new JButton();
-            dayButton.setPreferredSize(new Dimension(40, 40));
+            //dayButton.setPreferredSize(new Dimension(40, 40));
 
             
             if ((lMonth == month) && (lYear == year)) {
