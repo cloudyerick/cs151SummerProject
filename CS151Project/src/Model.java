@@ -18,6 +18,7 @@ public class Model {
 	
 	public Model() {
 		currentView = SelectedView.DAY;
+		presentDate = cal.get(Calendar.DAY_OF_MONTH);
 	}
 
 
@@ -29,11 +30,6 @@ public class Model {
 		for (ChangeListener l : listeners) {
 			l.stateChanged(new ChangeEvent(this));
 		}
-	}
-	
-	//returns number of days in month
-	public int getDaysInMonth(){
-		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 
 	//SETS CALENDAR TO TODAY'S DATE - JONATHAN 
@@ -47,30 +43,46 @@ public class Model {
 
 	public int getMonth() {
 		return cal.get(Calendar.MONTH);
+		
 	}
 
 	public int getYear() {
 		return cal.get(Calendar.YEAR);
 	}
 
+	
+	
+	
+	
 	//GOES TO NEXT DAY - JONATHAN
-	public void nextDay() {
+	public void nextDay() 
+	{
+		presentDate++;
 		cal.add(Calendar.DAY_OF_MONTH, 1);
+
+
+	}
+	//GOES TO PREVIOUS DAY - JONATHAN 
+	public void previousDay() {
+		presentDate--;
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		
 	}
 
+	
 	//GOES TO NEXT DAY - JONATHAN
 	public void nextMonth() {
 		cal.add(Calendar.MONTH, 1);
+		update();
+	
 	}
 	
 	public void nextWeek() {
 		cal.add(Calendar.WEEK_OF_YEAR, 1);
+		update();
+		
 	}
 
-	//GOES TO PREVIOUS DAY - JONATHAN 
-	public void previousDay() {
-		cal.add(Calendar.DAY_OF_MONTH, -1);
-	}
 
 	public void previousWeek() {
 		cal.add(Calendar.WEEK_OF_YEAR, -1);
@@ -88,7 +100,11 @@ public class Model {
 	public void setDayView() {
 		currentView = SelectedView.DAY;
 	}
-
+	
+	public void setDay()
+	{
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+	}
 	public void setWeekView() {
 		currentView = SelectedView.WEEK;
 	}
