@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.BoxLayout;
@@ -21,8 +22,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class View  implements ChangeListener, Runnable
-{
+public class View  implements ChangeListener, Runnable {
+	
+	private enum SelectedView {
+		DAY, WEEK, MONTH, AGENDA;
+	}
+
+	private SelectedView currentView;
 	private GregorianCalendar cal = new GregorianCalendar();
     private String[] monthNames = 
     	{ "January", "February",
@@ -45,18 +51,10 @@ public class View  implements ChangeListener, Runnable
 	private JButton fromFileButton = new JButton("From File");
 	private JFrame myFrame;
 	
-	
-	
 	private JTextArea eventList = new JTextArea(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
-	
-	
-	
 	
 	private JButton leftDay = new JButton("<");
 	private JButton rightDay = new JButton(">");
-	
-
-	
 	
 	/******************************
 	 * PANEL INSTANCE VARIABLES ***
@@ -75,25 +73,20 @@ public class View  implements ChangeListener, Runnable
 	 **************************/
 	private JLabel dateLabel = new JLabel(monthNames[cal.get(cal.MONTH)] + " " + cal.get(cal.DAY_OF_MONTH) + " " + cal.get(cal.YEAR), SwingConstants.CENTER); 
 	
-	
 	public View(Model model)
 	{
 		this.model = model;
+		currentView = SelectedView.DAY; //View defaults to day view. 
 		myFrame = new JFrame("Calendar");
-		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR), cal.get(cal.DAY_OF_MONTH));
+		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR), cal.get(cal.DAY_OF_MONTH), model);
 		myFrame.setLocation(20, 20);
 		
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
-		
-		
-		//JTextArea eventList = new JTextArea();
+
 		eventList.setEditable(false);
 		eventList.setRows(24);
-		//eventList.setText(" " + cal.get(cal.MONTH) + "/" + cal.get(cal.DAY_OF_MONTH) + "/" + cal.get(cal.YEAR) + ":");
-		
-		
 		
 		//TODAY BUTTON
 		JButton today = new JButton("Today");  //TODAY BUTTON SETS MODEL AND VIEW TO CURRENT TIME - JONATHAN 
@@ -156,6 +149,34 @@ public class View  implements ChangeListener, Runnable
 				run();
 			}
 		});
+		
+        int a;
+        for(a = 0; a < monthPanel.dayBtns.size(); a++)
+        {
+        	int b = a;
+        	monthPanel.dayBtns.get(a).button.addActionListener (new ActionListener () {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					model.newCurrentDate(monthPanel.dayBtns.get(b).year, monthPanel.dayBtns.get(b).month, monthPanel.dayBtns.get(b).day);
+			        monthPanel.month = monthPanel.dayBtns.get(b).month;
+			        monthPanel.year = monthPanel.dayBtns.get(b).year;
+			        monthPanel.day = monthPanel.dayBtns.get(b).day;
+					System.out.println("Year Array:" + monthPanel.dayBtns.get(b).year);
+					System.out.println("Month Array:" +monthPanel.dayBtns.get(b).month);
+					System.out.println("Days Array:" +monthPanel.dayBtns.get(b).day);
+					System.out.println("Model Year:" + model.getYear());
+					System.out.println("Model Month:" + model.getMonth());
+					System.out.println("Model Day:" + model.getDay());
+					System.out.println("------------------------------");
+					dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+					eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+					run();
+				}
+        		
+        	});
+        }
+		
+		
 		
 		//CREATE BUTTON
 		createButton.addActionListener(new ActionListener() {
@@ -233,73 +254,10 @@ public class View  implements ChangeListener, Runnable
 						+ String.valueOf(model.getYear());
 						//
 						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
-						System.out.println(eventCreated);
+						updateView();
 					}
 					
 				});
-				
-				//DONT NEED A REPEAT FUNCTIONALITY, KEEP AS COMMENT FOR NOW
-				/*
-				repeatBox.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (repeatBox.isSelected()) {
-						JDialog repeatDialog = new JDialog();
-						repeatDialog.setTitle("Repeat");
-						repeatDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
-						JPanel repeatPanel = new JPanel();
-						
-						JPanel boxStrip = new JPanel();
-						JPanel monthStrip = new JPanel();
-						
-						JLabel topLabel = new JLabel("Repeat every ");
-						JLabel fromLabel = new JLabel("from");
-						JLabel toLabel = new JLabel("to");
-						
-						String[] months = {"January", "Februrary", "March", "April", "May", "June", "July", "August", "September",
-								"October", "November", "December"
-						};
-						
-						JComboBox startMonth = new JComboBox(months);	
-						JComboBox endMonth = new JComboBox(months);
-						
-						JCheckBox sunday = new JCheckBox("S", false);
-						JCheckBox monday = new JCheckBox("M", false);
-						JCheckBox tuesday = new JCheckBox("T", false);
-						JCheckBox wednesday = new JCheckBox("W", false);
-						JCheckBox thursday = new JCheckBox("T", false);
-						JCheckBox friday = new JCheckBox("F", false);
-						JCheckBox saturday = new JCheckBox("S", false);
-						
-						JButton okButton = new JButton("Ok");
-					
-						monthStrip.add(fromLabel);
-						monthStrip.add(startMonth);
-						monthStrip.add(toLabel);
-						monthStrip.add(endMonth);
-						
-						boxStrip.add(sunday);
-						boxStrip.add(monday);
-						boxStrip.add(tuesday);
-						boxStrip.add(wednesday);
-						boxStrip.add(thursday);
-						boxStrip.add(friday);
-						boxStrip.add(saturday);
-						
-						BoxLayout layout = new BoxLayout(repeatPanel, BoxLayout.Y_AXIS);
-						repeatPanel.setLayout(layout);
-						repeatPanel.add(topLabel);
-						repeatPanel.add(boxStrip);
-						repeatPanel.add(monthStrip);
-						repeatPanel.add(okButton);
-						
-						repeatDialog.add(repeatPanel);
-						repeatDialog.pack();
-						repeatDialog.setVisible(true);
-						}
-					}
-				});
-				*/
 				
 				saveButton.addActionListener(new ActionListener() {
 					@Override
@@ -348,11 +306,33 @@ public class View  implements ChangeListener, Runnable
 		rightButtonPanel.add(monthButton);
 		rightButtonPanel.add(agendaButton);
 		
+		dayButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setDayView();
+				updateView();
+			}
+		});
+		
+		weekButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setWeekView();
+				updateView();
+			}
+		});
+		
+		monthButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setMonthView();
+				updateView();
+			}
+		});
 		
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
 		rightPanel.add(eventList, BorderLayout.CENTER);
-		
 		
 		myFrame.add(leftPanel);
 		myFrame.add(rightPanel);
@@ -363,13 +343,52 @@ public class View  implements ChangeListener, Runnable
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public void updateView() {
+		String date = model.getMonth() + "/" + model.getDay() + "/" + model.getYear();
+		String eventsDisplayText = "";
+		try {
+			if (this.currentView == SelectedView.DAY) {
+				eventsDisplayText = date + ":" + "\n";
+				for (Event e: model.getEvents(date)) {
+					eventsDisplayText += e.getName() + " - " + "From hour " +  
+							e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+				} 
+				eventList.setText(eventsDisplayText);
+			}
+			
+			/**
+			 * WORKING ON THIS CURRENTLY - JONATHAN 
+			 */
+			if (this.currentView == SelectedView.WEEK) {
+				GregorianCalendar modelCal = model.getCalendar();
+				int weekInMonthIteration = modelCal.get(Calendar.DAY_OF_MONTH) - modelCal.get(Calendar.DAY_OF_WEEK) + 1;
+				System.out.println(weekInMonthIteration);
+				for (int i = 0; i < modelCal.get(Calendar.DAY_OF_WEEK); i++) {
+					model.previousDay(); //Decrements the model to the start of the week 
+				}
+				for (int i = 0; i < 7; i++) {
+					date = model.getMonth() + "/" + model.getDay() + "/" + model.getYear(); //Updates the date String
+					System.out.println(date);
+					for (Event e: model.getEvents(date)) {
+						eventsDisplayText += e.getName() + " - " + "From hour " +  
+								e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+					}
+					model.nextDay(); //Increments day for next day of week events
+				}
+				eventList.setText(eventsDisplayText);
+			}
+			
+			if (true) {
+				
+			}
+		}
+		catch (NullPointerException n) {
+		}
+	}
+	
 	//add action listener methods
 	public void addEventActionListener(ActionListener l){
 		createButton.addActionListener(l);
-	}
-	
-	//create event method
-	public void createEvent(){
 	}
 
 	public void addTodayActionListener(ActionListener l){
@@ -378,18 +397,74 @@ public class View  implements ChangeListener, Runnable
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		
 	}
 
 	@Override
 	public void run() {
 		leftPanel.remove(monthPanel);
 		monthPanel = null;
-		monthPanel = new MonthPanel(model.getMonth(), model.getYear(), model.getDay());
+		monthPanel = new MonthPanel(model.getMonth(), model.getYear(), model.getDay(), model);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		leftPanel.repaint();
 		myFrame.pack();
 		
+        int a;
+        for(a = 0; a < monthPanel.dayBtns.size(); a++)
+        {
+        	int b = a;
+        	monthPanel.dayBtns.get(a).button.addActionListener (new ActionListener () {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					model.newCurrentDate(monthPanel.dayBtns.get(b).year, monthPanel.dayBtns.get(b).month, monthPanel.dayBtns.get(b).day);
+			        monthPanel.month = monthPanel.dayBtns.get(b).month;
+			        monthPanel.year = monthPanel.dayBtns.get(b).year;
+			        monthPanel.day = monthPanel.dayBtns.get(b).day;
+					System.out.println("Year Array:" + monthPanel.dayBtns.get(b).year);
+					System.out.println("Month Array:" + monthPanel.dayBtns.get(b).month);
+					System.out.println("Days Array:" + monthPanel.dayBtns.get(b).day);
+					System.out.println("Model Year:" + model.getYear());
+					System.out.println("Model Month:" + model.getMonth());
+					System.out.println("Model Day:" + model.getDay());
+					System.out.println("------------------------------");
+					dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+					eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+					run();
+				}
+        		
+        	});
+        }
 	}
+	
+	public void setWeekView() {
+		currentView = SelectedView.WEEK;
+	}
+
+	public void setMonthView() {
+		currentView = SelectedView.MONTH;
+	}
+
+	public void setAgendaView() {
+		currentView = SelectedView.AGENDA;
+	}
+	
+	//Might not need 
+	public SelectedView getView() {
+		return currentView;
+	}
+
+	public void setDayView() {
+		currentView = SelectedView.DAY;
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
 
