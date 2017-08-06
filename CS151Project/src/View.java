@@ -131,8 +131,9 @@ public class View  implements ChangeListener, Runnable
 			}
 		});
 		
-		leftDay.setPreferredSize(new Dimension(30, 30));
-		rightDay.setPreferredSize(new Dimension(30, 30));
+		//preferred size does not run on windows
+		//leftDay.setPreferredSize(new Dimension(30, 30));
+		//rightDay.setPreferredSize(new Dimension(30, 30));
 		
 		leftDay.addActionListener(new ActionListener() {
 			@Override
@@ -230,6 +231,7 @@ public class View  implements ChangeListener, Runnable
 						}
 						String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
 						+ String.valueOf(model.getYear());
+						//
 						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
 						System.out.println(eventCreated);
 					}
