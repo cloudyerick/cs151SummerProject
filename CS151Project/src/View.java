@@ -424,6 +424,32 @@ public class View  implements ChangeListener, Runnable
 		leftPanel.repaint();
 		myFrame.pack();
 		
+        int a;
+        for(a = 0; a < monthPanel.dayBtns.size(); a++)
+        {
+        	int b = a;
+        	monthPanel.dayBtns.get(a).button.addActionListener (new ActionListener () {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					model.newCurrentDate(monthPanel.dayBtns.get(b).year, monthPanel.dayBtns.get(b).month, monthPanel.dayBtns.get(b).day);
+			        monthPanel.month = monthPanel.dayBtns.get(b).month;
+			        monthPanel.year = monthPanel.dayBtns.get(b).year;
+			        monthPanel.day = monthPanel.dayBtns.get(b).day;
+					System.out.println("Year Array:" + monthPanel.dayBtns.get(b).year);
+					System.out.println("Month Array:" +monthPanel.dayBtns.get(b).month);
+					System.out.println("Days Array:" +monthPanel.dayBtns.get(b).day);
+					System.out.println("Model Year:" + model.getYear());
+					System.out.println("Model Month:" + model.getMonth());
+					System.out.println("Model Day:" + model.getDay());
+					System.out.println("------------------------------");
+					dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+					eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+					run();
+				}
+        		
+        	});
+        }
+		
 	}
 
 }
