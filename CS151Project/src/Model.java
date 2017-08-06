@@ -118,9 +118,9 @@ public class Model {
 			for (Event event: events.get(stringDate)) {  
 				// Checks to see if e's start time of end time intersects with any of the store event's times. 
 				int hoursInEvents = event.getEndTime() - event.getStartTime();
+				System.out.println(hoursInEvents);
 				for (int i = 0; i <= hoursInEvents; i++) {
-					if (e.getStartTime() == event.getStartTime() + i || e.getEndTime() == event.getStartTime() + i
-							|| e.getStartTime() + i == event.getStartTime() || e.getEndTime() + i == event.getEndTime()) {
+					if (e.getStartTime() == event.getStartTime() + i || e.getEndTime() == event.getEndTime() + i) {
 						return true;
 					}
 				}

@@ -358,10 +358,20 @@ public class View  implements ChangeListener, Runnable {
 		try {
 			if (this.currentView == SelectedView.DAY) {
 				eventsDisplayText = date + ":" + "\n";
-				for (Event e: model.getEvents(date)) {
-					eventsDisplayText += e.getName() + " - " + "From hour " +  
-							e.getStartTime() + " to hour " + e.getEndTime() + "\n";
-				} 
+				if (model.hasEvents(date)) {
+					try {
+						for (Event e: model.getEvents(date)) {
+							eventsDisplayText += e.getName() + " - " + "From hour " +  
+									e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+						} 
+					}
+					catch (NullPointerException n) {
+						return;
+					}
+				}
+				else {
+					eventsDisplayText = date + ":";
+				}
 				eventList.setText(eventsDisplayText);
 			}
 			
