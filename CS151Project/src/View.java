@@ -201,7 +201,6 @@ public class View  implements ChangeListener, Runnable {
 						try {
 							if (Integer.valueOf(startTime.getText()) <= 23 && Integer.valueOf(startTime.getText()) >= 0 && 
 									Integer.valueOf(endTime.getText()) <= 23 && Integer.valueOf(endTime.getText()) >= 0 && eventName.getText().length() > 0) {
-								//SAVE FUNCTIONALITY HERE
 								createDialog.dispose();
 							}
 							else {
@@ -250,20 +249,32 @@ public class View  implements ChangeListener, Runnable {
 							errorDialog.setVisible(true);
 						}
 						String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
-						+ String.valueOf(model.getYear());
+								+ String.valueOf(model.getYear());
 						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
+						if (!eventCreated) {
+							JDialog conflictionDialog = new JDialog();
+							JPanel conflictionPanel = new JPanel(); 
+							conflictionDialog.setTitle("Time Confliction Error");
+							conflictionDialog.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+							conflictionPanel.add(new JLabel("Time confliction occurred. Try Again."));
+							JButton okButton2 = new JButton("Ok");
+							conflictionPanel.add(okButton2);
+							okButton2.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									conflictionDialog.dispose();
+								}	
+							});
+							conflictionDialog.add(conflictionPanel);
+							conflictionDialog.pack();
+							conflictionDialog.setVisible(true);
+							
+						}
 						updateView();
 					}
 					
 				});
 				
-				saveButton.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//INSERT SAVE FUNCTIONALITY
-						createDialog.dispose();
-					}
-				});
 				
 				createDialog.setLayout(new BorderLayout());
 				createDialog.add(eventName, BorderLayout.NORTH);
@@ -358,27 +369,37 @@ public class View  implements ChangeListener, Runnable {
 			 * WORKING ON THIS CURRENTLY - JONATHAN 
 			 */
 			if (this.currentView == SelectedView.WEEK) {
-				GregorianCalendar modelCal = model.getCalendar();
-				int weekInMonthIteration = modelCal.get(Calendar.DAY_OF_MONTH) - modelCal.get(Calendar.DAY_OF_WEEK) + 1;
-				System.out.println(weekInMonthIteration);
-				for (int i = 0; i < modelCal.get(Calendar.DAY_OF_WEEK); i++) {
-					model.previousDay(); //Decrements the model to the start of the week 
-				}
-				for (int i = 0; i < 7; i++) {
-					date = model.getMonth() + "/" + model.getDay() + "/" + model.getYear(); //Updates the date String
-					System.out.println(date);
-					for (Event e: model.getEvents(date)) {
-						eventsDisplayText += e.getName() + " - " + "From hour " +  
-								e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+				GregorianCalendar placeholderCal = new GregorianCalendar(); 
+				placeholderCal.set(Calendar.WEEK_OF_YEAR, model.getCalendar().get(Calendar.WEEK_OF_YEAR));
+			}
+			
+			//MONTH VIEW 
+			if (this.currentView == SelectedView.MONTH) {
+				GregorianCalendar placeholderCal = new GregorianCalendar();
+				placeholderCal.set(model.getYear(), model.getMonth(), 1);
+				for (int i = 1; i <= model.getCalendar().getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+					System.out.println("actual max: " + model.getCalendar().getActualMaximum(Calendar.DAY_OF_MONTH));
+					date = model.getMonth() + "/" + i + "/" + model.getYear();
+					if (model.hasEvents(date)) {
+						eventsDisplayText += date + ":" + "\n";
 					}
-					model.nextDay(); //Increments day for next day of week events
+					try {
+						for (Event e: model.getEvents(date)) {
+							eventsDisplayText += e.getName() + " - " + "From hour " +  
+									e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+						}
+					}
+					catch (NullPointerException n) {
+						continue;
+					}
 				}
 				eventList.setText(eventsDisplayText);
 			}
 			
-			if (true) {
+			if (this.currentView == SelectedView.AGENDA) {
 				
 			}
+			
 		}
 		catch (NullPointerException n) {
 		}
@@ -395,6 +416,7 @@ public class View  implements ChangeListener, Runnable {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
+		updateView();
 	}
 
 	@Override
@@ -426,6 +448,8 @@ public class View  implements ChangeListener, Runnable {
 					System.out.println("------------------------------");
 					dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 					eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+					setDayView();
+					updateView();
 					run();
 				}
         		

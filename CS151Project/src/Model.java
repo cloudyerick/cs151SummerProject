@@ -119,7 +119,8 @@ public class Model {
 				// Checks to see if e's start time of end time intersects with any of the store event's times. 
 				int hoursInEvents = event.getEndTime() - event.getStartTime();
 				for (int i = 0; i <= hoursInEvents; i++) {
-					if (e.getStartTime() == event.getStartTime() + i || e.getEndTime() == event.getStartTime() + i) {
+					if (e.getStartTime() == event.getStartTime() + i || e.getEndTime() == event.getStartTime() + i
+							|| e.getStartTime() + i == event.getStartTime() || e.getEndTime() + i == event.getEndTime()) {
 						return true;
 					}
 				}
@@ -142,11 +143,15 @@ public class Model {
 		}
 		boolean added = eventDupeTest.add(eventBeingCreated);
 		//eventList.add(eventToCreate);
-		if (!eventHasConfliction(eventBeingCreated)) {
+		boolean confliction = eventHasConfliction(eventBeingCreated);
+		if (!confliction) {
 			events.put(date, eventDupeTest);
 		}
+		else {
+			events.get(date).remove(eventBeingCreated);
+		}
 		//events.put(date, eventDupeTest);
-		return added;
+		return !confliction;
 	}
 	
 	public HashSet<Event> getEvents(String date) {
