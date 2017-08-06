@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.BorderFactory;
@@ -24,7 +27,10 @@ public class MonthPanel extends JPanel {
     public int tYear;
     public Calendar today;
     public int lDay;
-    
+    private Model model;
+    public ArrayList<buttonList > dayBtns = new ArrayList<buttonList >();
+    public int lYear = 0;
+    public int lMonth = 0;
     
     public String[] monthNames = 
     	{ "January", "February",
@@ -36,11 +42,11 @@ public class MonthPanel extends JPanel {
     	{ "S", "M", "T", "W",
             "T", "F", "S"};
 
-    public MonthPanel(int month, int year, int day) {
+    public MonthPanel(int month, int year, int day, Model model) {
         this.month = month;
         this.year = year;
         this.day = day;
-        
+        this.model = model;
         this.add(createGUI());
         
     }
@@ -102,10 +108,9 @@ public class MonthPanel extends JPanel {
         int count = 0;
         int limit = dayNames.length * 6;
         
-        
         while (iterator.getTimeInMillis() < maximum.getTimeInMillis()) {
-            int lMonth = iterator.get(Calendar.MONTH);
-            int lYear = iterator.get(Calendar.YEAR);
+            lMonth = iterator.get(Calendar.MONTH);
+            lYear = iterator.get(Calendar.YEAR);
 
             JPanel dPanel = new JPanel(true);
             dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -113,6 +118,11 @@ public class MonthPanel extends JPanel {
             JButton dayButton = new JButton();
             //dayButton.setPreferredSize(new Dimension(40, 40));
 
+            
+            
+            
+            
+            
             
             if ((lMonth == month) && (lYear == year)) {
                 lDay = iterator.get(Calendar.DAY_OF_MONTH);
@@ -141,11 +151,15 @@ public class MonthPanel extends JPanel {
             		dPanel.add(dayButton);
             }
             
+            buttonList test = new buttonList(dayButton, lYear, lMonth, lDay);
+            dayBtns.add(test);
+            
             
             //dPanel.add(dayButton);
             dayPanel.add(dPanel);
             iterator.add(Calendar.DAY_OF_YEAR, +1);
             count++;
+
         }
 
         for (int i = count; i < limit; i++) {
@@ -158,8 +172,7 @@ public class MonthPanel extends JPanel {
             dayPanel.add(dPanel);
         }
         
-        
-        
+
         
         return dayPanel;
     }
@@ -169,5 +182,29 @@ public class MonthPanel extends JPanel {
 		this.month = month;
 		this.year = year;
 	}
+	
+	
+	public class buttonList 
+	{
+		public JButton button;
+		public int year;
+		public int month;
+		public int day;
+		
+		public buttonList(JButton button, int iYear, int iMonth, int iDay) 
+		{
+			this.button = button;
+			this.year = iYear;
+			this.month = iMonth;
+			this.day = iDay;
+		}
+		
+		
+		
+	}
+
+
+
+
 
 }

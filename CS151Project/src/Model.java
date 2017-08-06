@@ -102,6 +102,21 @@ public class Model {
 		currentView = SelectedView.DAY;
 	}
 	
+	
+	
+	
+	
+	public void newCurrentDate(int year, int month, int day)
+	{
+		cal.set(year, month, day);
+		presentDate = day;
+	}
+	
+	
+	
+	
+	
+	
 	public void setDay()
 	{
 		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);

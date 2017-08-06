@@ -80,7 +80,7 @@ public class View  implements ChangeListener, Runnable
 	{
 		this.model = model;
 		myFrame = new JFrame("Calendar");
-		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR), cal.get(cal.DAY_OF_MONTH));
+		monthPanel = new MonthPanel(cal.get(cal.MONTH), cal.get(cal.YEAR), cal.get(cal.DAY_OF_MONTH), model);
 		myFrame.setLocation(20, 20);
 		
 		//ALL BUTTON FUNCTIONALITY GOES HERE:
@@ -155,6 +155,34 @@ public class View  implements ChangeListener, Runnable
 				run();
 			}
 		});
+		
+        int a;
+        for(a = 0; a < monthPanel.dayBtns.size(); a++)
+        {
+        	int b = a;
+        	monthPanel.dayBtns.get(a).button.addActionListener (new ActionListener () {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					model.newCurrentDate(monthPanel.dayBtns.get(b).year, monthPanel.dayBtns.get(b).month, monthPanel.dayBtns.get(b).day);
+			        monthPanel.month = monthPanel.dayBtns.get(b).month;
+			        monthPanel.year = monthPanel.dayBtns.get(b).year;
+			        monthPanel.day = monthPanel.dayBtns.get(b).day;
+					System.out.println("Year Array:" + monthPanel.dayBtns.get(b).year);
+					System.out.println("Month Array:" +monthPanel.dayBtns.get(b).month);
+					System.out.println("Days Array:" +monthPanel.dayBtns.get(b).day);
+					System.out.println("Model Year:" + model.getYear());
+					System.out.println("Model Month:" + model.getMonth());
+					System.out.println("Model Day:" + model.getDay());
+					System.out.println("------------------------------");
+					dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
+					eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+					run();
+				}
+        		
+        	});
+        }
+		
+		
 		
 		//CREATE BUTTON
 		createButton.addActionListener(new ActionListener() {
@@ -350,6 +378,12 @@ public class View  implements ChangeListener, Runnable
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(rightButtonPanel, BorderLayout.NORTH);
 		rightPanel.add(eventList, BorderLayout.CENTER);
+
+		
+		
+		
+		
+		
 		
 		
 		myFrame.add(leftPanel);
@@ -379,15 +413,28 @@ public class View  implements ChangeListener, Runnable
 		
 	}
 
+	
+
 	@Override
 	public void run() {
 		leftPanel.remove(monthPanel);
 		monthPanel = null;
-		monthPanel = new MonthPanel(model.getMonth(), model.getYear(), model.getDay());
+		monthPanel = new MonthPanel(model.getMonth(), model.getYear(), model.getDay(), model);
 		leftPanel.add(monthPanel, BorderLayout.SOUTH);
 		leftPanel.repaint();
 		myFrame.pack();
 		
 	}
+
 }
+
+
+
+
+
+
+
+
+
+
 
