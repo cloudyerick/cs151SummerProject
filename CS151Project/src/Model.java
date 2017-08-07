@@ -170,42 +170,7 @@ public class Model {
 	
 	//LOADS EVENTS FROM INPUT.TXT, returns true if successful
 	public void loadEventsFromeFile(){
-		/*Each event in the input.txt takes up one line and consists of 
-		 * the following items separated by a semi-colon:
-		 * event name;year;start month;end month;days SMTWHF;start time;end time
-		 * 
-		 * loop through entire file
-		 *  store each String into "line"
-		 * process each String into sub Strings
-		 * 
-		 * 		String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
-		 *			+ String.valueOf(model.getYear());
-		 * 		
-		 * 		String[] s = line.split(";");
-		 * 		
-		 * 		String name = s[0];
-		 * 		String year = s[1];
-		 * 		String startMonth = s[2];
-		 * 		String endMonth = s[3];
-		 * 		String days = s[3];
-		 * 		String startTime = s[2];
-		 * 		String endTime = s[2];
-		 * 
-		 * 		create date String - will change in loop
-		 * 		String date = 
-		 * 
-		 * 		convert integer values for scheduling loop
-		 * 		
-		 * 		int yearInt = Integer.parseInt(year);
-		 * 		int startMonthInt = Integer.parseInt(startMonth);
-		 * 		int startMonthNInt = Integer.parseInt(startMonth);
-		 * 
-		 * 
-		 * 
-		 * 		
-		 * 
-		 * loop through time frame and call createEvent(name, date, startTime, endTime)
-		*/
+		
 		
 		//get all data into lines ArayList
 		ArrayList<String> lines = new ArrayList<String>();
@@ -213,6 +178,9 @@ public class Model {
 			String line;
 			while ((line = br.readLine()) != null) {
 				lines.add(line);
+				/*//test
+				System.out.println(line);
+				*/
 			}
 			
 		} catch (IOException e){
@@ -243,12 +211,13 @@ public class Model {
 			
 			//new calendar starting on beginning date range
 			GregorianCalendar cal1 = new GregorianCalendar(yearInt, startMonthInt, 1);
+			GregorianCalendar cal2 = new GregorianCalendar(yearInt, startMonthInt, 1);
 			
 			//calculate # of days in range
 			int daysInRange = 0;
 			for(int i = startMonthInt; i <= endMonthInt; i++){
-				daysInRange += cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
-				cal1.add(Calendar.MONTH, 1);
+				daysInRange += cal2.getActualMaximum(Calendar.DAY_OF_MONTH);
+				cal2.add(Calendar.MONTH, 1);
 			}
 			
 			for(int i = 0; i < daysInRange; i++){
@@ -258,6 +227,8 @@ public class Model {
 					 			+ String.valueOf(cal1.get(Calendar.YEAR));
 				
 					createEvent(name, date, startTimeInt, endTimeInt);
+					
+					
 				}
 				
 				if(days.contains("M") && (cal1.get(Calendar.DAY_OF_WEEK) == 2)){
@@ -266,6 +237,9 @@ public class Model {
 				 			+ String.valueOf(cal1.get(Calendar.YEAR));
 			
 					createEvent(name, date, startTimeInt, endTimeInt);
+					/*//test
+					System.out.println(name + "+" + date + "+" + startTimeInt + "+" + endTimeInt);
+					*/
 				}
 				
 				if(days.contains("T") && (cal1.get(Calendar.DAY_OF_WEEK) == 3)){

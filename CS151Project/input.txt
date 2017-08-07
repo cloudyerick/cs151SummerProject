@@ -1,3 +1,3 @@
 Math Class;2017;7;9;MWF;17;18;
-Spanish;2014;1;2;MHF;12;19;
-English;2014;1;2;MWA;13;14;
+Spanish;2017;8;12;STA;12;19;
+English;2017;8;9;MWA;13;14;
