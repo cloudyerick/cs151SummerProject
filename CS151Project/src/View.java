@@ -97,6 +97,7 @@ public class View  implements ChangeListener, Runnable {
 				model.goToToday();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + cal.get(cal.DAY_OF_MONTH) + " "+ model.getYear());
 				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+				updateView();
 				run();
 			}
 		});

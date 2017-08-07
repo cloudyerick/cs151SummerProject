@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Event implements Serializable{
+public class Event implements Serializable, Comparable<Event> {
 
 
 		private String name;
@@ -51,6 +51,10 @@ public class Event implements Serializable{
 		
 		public int hashCode() {
 			return name.length() + date.length() + startTime + endTime;
+		}
+		
+		public int compareTo(Event e) {
+			return this.startTime - e.startTime;
 		}
 	
 }
