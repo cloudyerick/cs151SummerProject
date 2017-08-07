@@ -21,6 +21,10 @@ public class Model {
 		presentDate = cal.get(Calendar.DAY_OF_MONTH);
 	}
 
+	public void setDate(int iYear, int iMonth, int iDay)
+	{
+		cal.set(iYear, iMonth, iDay);
+	}
 
 	public void attach(ChangeListener l) {
 		listeners.add(l);
