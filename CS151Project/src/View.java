@@ -176,7 +176,18 @@ public class View  implements ChangeListener, Runnable {
         	});
         }
 		
-		
+        //FROM FILE BUTTON
+		fromFileButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				model.loadEventsFromeFile();
+				/*
+				setDayView();
+				updateView();
+				*/
+			}
+		});
 		
 		//CREATE BUTTON
 		createButton.addActionListener(new ActionListener() {
@@ -250,12 +261,10 @@ public class View  implements ChangeListener, Runnable {
 							errorDialog.setVisible(true);
 						}
 						String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
-<<<<<<< HEAD
+
 						+ String.valueOf(model.getYear());
-						//
-=======
-								+ String.valueOf(model.getYear());
->>>>>>> 859aac29e53f2cc9d601af89294d286817122b41
+				
+
 						boolean eventCreated = model.createEvent(eventName.getText(), stringDate, Integer.valueOf(startTime.getText()), Integer.valueOf(endTime.getText()));
 						if (!eventCreated) {
 							JDialog conflictionDialog = new JDialog();

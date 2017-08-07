@@ -1,13 +1,23 @@
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Model {
@@ -152,6 +162,151 @@ public class Model {
 		}
 		//events.put(date, eventDupeTest);
 		return !confliction;
+	}
+	
+	//LOADS EVENTS FROM INPUT.TXT, returns true if successful
+	public void loadEventsFromeFile(){
+		/*Each event in the input.txt takes up one line and consists of 
+		 * the following items separated by a semi-colon:
+		 * event name;year;start month;end month;days SMTWHF;start time;end time
+		 * 
+		 * loop through entire file
+		 *  store each String into "line"
+		 * process each String into sub Strings
+		 * 
+		 * 		String stringDate = String.valueOf(model.getMonth()) + "/" + String.valueOf(model.getDay()) + "/" 
+		 *			+ String.valueOf(model.getYear());
+		 * 		
+		 * 		String[] s = line.split(";");
+		 * 		
+		 * 		String name = s[0];
+		 * 		String year = s[1];
+		 * 		String startMonth = s[2];
+		 * 		String endMonth = s[3];
+		 * 		String days = s[3];
+		 * 		String startTime = s[2];
+		 * 		String endTime = s[2];
+		 * 
+		 * 		create date String - will change in loop
+		 * 		String date = 
+		 * 
+		 * 		convert integer values for scheduling loop
+		 * 		
+		 * 		int yearInt = Integer.parseInt(year);
+		 * 		int startMonthInt = Integer.parseInt(startMonth);
+		 * 		int startMonthNInt = Integer.parseInt(startMonth);
+		 * 
+		 * 
+		 * 
+		 * 		
+		 * 
+		 * loop through time frame and call createEvent(name, date, startTime, endTime)
+		*/
+		
+		//get all data into lines ArayList
+		ArrayList<String> lines = new ArrayList<String>();
+		try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				lines.add(line);
+			}
+			
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		//process all lines
+		for(String line: lines){
+			
+			String[] s = line.split(";");
+			
+			String name = s[0];
+			String year = s[1];
+			String startMonth = s[2];
+			String endMonth = s[3];
+			String days = s[4];
+			String startTime = s[5];
+			String endTime = s[6];
+			
+			int yearInt = Integer.parseInt(year);
+			int startMonthInt = Integer.parseInt(startMonth);
+			int endMonthInt = Integer.parseInt(endMonth);
+			int startTimeInt = Integer.parseInt(startTime);
+			int endTimeInt = Integer.parseInt(endTime);
+			
+			//this value will change
+			String date;
+			
+			//new calendar starting on beginning date range
+			GregorianCalendar cal1 = new GregorianCalendar(yearInt, startMonthInt, 1);
+			
+			//calculate # of days in range
+			int daysInRange = 0;
+			for(int i = startMonthInt; i <= endMonthInt; i++){
+				daysInRange += cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
+				cal1.add(Calendar.MONTH, 1);
+			}
+			
+			for(int i = 0; i < daysInRange; i++){
+				if(days.contains("S") && (cal1.get(Calendar.DAY_OF_WEEK) == 1)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+					 			+ String.valueOf(cal1.get(Calendar.YEAR));
+				
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				if(days.contains("M") && (cal1.get(Calendar.DAY_OF_WEEK) == 2)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				if(days.contains("T") && (cal1.get(Calendar.DAY_OF_WEEK) == 3)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				if(days.contains("W") && (cal1.get(Calendar.DAY_OF_WEEK) == 4)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				if(days.contains("H") && (cal1.get(Calendar.DAY_OF_WEEK) == 5)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				if(days.contains("F") && (cal1.get(Calendar.DAY_OF_WEEK) == 6)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				if(days.contains("A") && (cal1.get(Calendar.DAY_OF_WEEK) == 7)){
+					
+					date = String.valueOf(cal1.get(Calendar.MONTH)) + "/" + String.valueOf(cal1.get(Calendar.DAY_OF_MONTH)) + "/" 
+				 			+ String.valueOf(cal1.get(Calendar.YEAR));
+			
+					createEvent(name, date, startTimeInt, endTimeInt);
+				}
+				
+				//Increment calendar
+				cal1.add(Calendar.DAY_OF_MONTH, 1);	
+			}	
+		}
 	}
 	
 	public HashSet<Event> getEvents(String date) {
