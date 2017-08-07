@@ -1,3 +1,10 @@
 Math Class;2017;7;9;MWF;17;18;
 Spanish;2017;8;12;STA;12;19;
 English;2017;8;9;MWA;13;14;
+Bicycle ride;2017;11;12;THF;2;3;
+Breakfast;2017;4;10;STA;4;5;
+Lunch;2017;7;8;HAS;6;7;
+Dinner;2017;1;2;FWM;8;9;
+Run;2017;10;11;HFM;10;11;
+Watch TV;2017;3;9;TMA;12;13;
+Rock Climb;2017;9;11;S;14;15;
