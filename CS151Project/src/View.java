@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -108,6 +109,7 @@ public class View  implements ChangeListener, Runnable {
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " " + model.getYear());
 				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+				updateView();
 				run();
 			}
 		});
@@ -120,6 +122,7 @@ public class View  implements ChangeListener, Runnable {
 				model.setDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+				updateView();
 				run();
 			}
 		});
@@ -135,6 +138,7 @@ public class View  implements ChangeListener, Runnable {
 				monthPanel.prevDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+				updateView();
 				run();
 			}
 		});
@@ -146,6 +150,7 @@ public class View  implements ChangeListener, Runnable {
 				monthPanel.nextDay();
 				dateLabel.setText(monthNames[model.getMonth()] + " " + model.getDay() + " "+ model.getYear());
 				eventList.setText(" " + model.getMonth() + "/" + model.getDay() + "/" + model.getYear() + ":");
+				updateView();
 				run();
 			}
 		});
@@ -373,10 +378,20 @@ public class View  implements ChangeListener, Runnable {
 		try {
 			if (this.currentView == SelectedView.DAY) {
 				eventsDisplayText = date + ":" + "\n";
-				for (Event e: model.getEvents(date)) {
-					eventsDisplayText += e.getName() + " - " + "From hour " +  
-							e.getStartTime() + " to hour " + e.getEndTime() + "\n";
-				} 
+				if (model.hasEvents(date)) {
+					try {
+						for (Event e: model.getEvents(date)) {
+							eventsDisplayText += e.getName() + " - " + "From hour " +  
+									e.getStartTime() + " to hour " + e.getEndTime() + "\n";
+						} 
+					}
+					catch (NullPointerException n) {
+						return;
+					}
+				}
+				else {
+					eventsDisplayText = date + ":";
+				}
 				eventList.setText(eventsDisplayText);
 			}
 			
@@ -384,8 +399,47 @@ public class View  implements ChangeListener, Runnable {
 			 * WORKING ON THIS CURRENTLY - JONATHAN 
 			 */
 			if (this.currentView == SelectedView.WEEK) {
-				GregorianCalendar placeholderCal = new GregorianCalendar(); 
-				placeholderCal.set(Calendar.WEEK_OF_YEAR, model.getCalendar().get(Calendar.WEEK_OF_YEAR));
+				
+
+				GregorianCalendar c = new GregorianCalendar();
+				Date date1 = new Date(model.getYear(), model.getMonth(), model.getDay());
+				
+				
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				System.out.println("MONDAY: " + c.getTime());
+				
+				
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+				System.out.println("TUESDAY: " + c.getTime());
+				
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+				System.out.println("WEDNESDAY: " + c.getTime());
+				
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+				System.out.println("THURSDAY: " + c.getTime());
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+				System.out.println("FRIDAY: " + c.getTime());
+				
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+				System.out.println("SATURDAY: " + c.getTime());
+				
+				c.setTime(date1);
+				c.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+				System.out.println("SUNDAY: " + c.getTime());
+
+	
 			}
 			
 			//MONTH VIEW 
